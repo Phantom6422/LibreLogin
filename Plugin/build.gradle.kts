@@ -18,8 +18,6 @@ repositories {
     maven("https://repo.kyngs.xyz/public/")
     maven("https://mvn.exceptionflug.de/repository/exceptionflug-public/")
     maven("https://repo.dmulloy2.net/repository/public/")
-    maven("https://repo.alessiodp.com/releases/")
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
     maven("https://jitpack.io/")
