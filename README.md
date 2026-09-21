@@ -1,12 +1,11 @@
-
 # LibreLogin
 
 (formerly LibrePremium) is an open-source, multiplatform, and highly customizable authentication plugin with outstanding features and API.
 
 # Quick information
 
-<img src="https://img.shields.io/badge/Java%20version-%2017+-blue?style=for-the-badge&logo=java&logoColor=white"
-alt="Plugin requires Java 17 or newer"></img>
+<img src="https://img.shields.io/badge/Java%20version-%2021+-blue?style=for-the-badge&logo=java&logoColor=white"
+alt="Plugin requires Java 21 or newer"></img>
 
 <a href="https://discord.gg/HP3CSfCv2v">
 <img src="https://img.shields.io/badge/Discord-%20SUPPORT-blue?style=for-the-badge&logo=discord&logoColor=white" 
@@ -37,9 +36,20 @@ alt="Contributors listed"></img>
 
 ## Platforms
 
-- [x] Velocity
-- [x] BungeeCord
-- [x] Paper
+- [x] Velocity (3.x & 4.x, including 4.2.1-SNAPSHOT)
+- [x] Paper (1.20.5 - 1.21+)
+- [ ] BungeeCord *(Deprecated / dropped in 0.25+ due to Adventure 5 migration)*
+
+## Building from Source
+
+To build the plugin jar:
+
+```bash
+# Requires Java 21 or newer
+./gradlew shadowJar
+```
+
+The compiled jar will be available in `Plugin/build/libs/LibreLogin.jar`.
 
 ## References
 
@@ -54,8 +64,8 @@ alt="Contributors listed"></img>
 
 # License
 
-LibrePremium is [FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software), licensed under the Mozilla Public License 2.0.
+LibreLogin is [FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software), licensed under the Mozilla Public License 2.0.
 
 [Read the license here.](https://github.com/kyngs/LibreLogin/blob/master/LICENSE)
 
-The plugin **is and always will be** completely open-source, so you don't need to worry about malicous copies.
+The plugin **is and always will be** completely open-source, so you don't need to worry about malicious copies.
