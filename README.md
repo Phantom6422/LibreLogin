@@ -1,6 +1,6 @@
 # LibreLogin
 
-(formerly LibrePremium) is an open-source, multiplatform, and highly customizable authentication plugin with outstanding features and API.
+(formerly LibrePremium) is an open-source, Velocity-focused, and highly customizable authentication plugin with outstanding features and API.
 
 # Quick information
 
@@ -15,7 +15,7 @@ alt="Support available on Discord"></img>
 <img src="https://img.shields.io/badge/Documentation-555555?style=for-the-badge&logo=wikipedia" alt="Documentation on the Wiki"></img>
 </a>
 
-<a href="https://github.com/kyngs/LibreLogin/graphs/contributors">
+<a href="https://github.com/Phantom6422/LibreLogin/graphs/contributors">
 <img src="https://img.shields.io/badge/Contributors-Credits-blue?style=for-the-badge" 
 alt="Contributors listed"></img>
 </a>
@@ -37,8 +37,8 @@ alt="Contributors listed"></img>
 ## Platforms
 
 - [x] Velocity (3.x & 4.x, including 4.2.1-SNAPSHOT)
-- [x] Paper (1.20.5+ / 26.x)
-- [ ] BungeeCord *(Deprecated / dropped in 0.25+ due to Adventure 5 migration)*
+- [ ] Paper *(Dropped in 0.25+ - Velocity only)*
+- [ ] BungeeCord *(Dropped in 0.25+ due to Adventure 5 migration)*
 
 ## Building from Source
 
