@@ -37,7 +37,7 @@ alt="Contributors listed"></img>
 ## Platforms
 
 - [x] Velocity (3.x & 4.x, including 4.2.1-SNAPSHOT)
-- [x] Paper (1.20.5 - 1.21+)
+- [x] Paper (1.20.5+ / 26.x)
 - [ ] BungeeCord *(Deprecated / dropped in 0.25+ due to Adventure 5 migration)*
 
 ## Building from Source
