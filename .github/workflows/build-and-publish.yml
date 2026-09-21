@@ -27,6 +27,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew spotlessCheck build
 
+      - name: Upload Jar Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreLogin
+          path: Plugin/build/libs/LibreLogin.jar
+
       - name: Setup Velocity environment
         run: |
           mkdir -p velocity/plugins
@@ -39,11 +45,11 @@ jobs:
           java -jar velocity.jar
 
       - name: Publish with Gradle
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+        if: github.repository == 'kyngs/LibreLogin' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
         run: ./gradlew :API:publish -PkyngsRepoUsername=${{ secrets.KYNGS_REPO_TOKEN }} -PkyngsRepoPassword=${{ secrets.KYNGS_REPO_SECRET }}
 
       - name: Update Wiki
-        if: github.ref == 'refs/heads/master'
+        if: github.repository == 'kyngs/LibreLogin' && github.ref == 'refs/heads/master'
         run: |
           git clone https://github.com/kyngs/LibreLogin.wiki.git wiki
           cd wiki
@@ -55,7 +61,7 @@ jobs:
           git diff-index --quiet HEAD || git commit -m 'Update configuration and messages on wiki' && git push https://kyngs:${{ secrets.GITHUB_TOKEN }}@github.com/kyngs/LibreLogin.wiki.git
 
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.repository == 'kyngs/LibreLogin' && startsWith(github.ref, 'refs/tags/')
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +69,7 @@ jobs:
         run: ./gradlew :Plugin:release -PbuildTarget=release
 
       - name: Publish dev build
-        if: github.ref == 'refs/heads/dev'
+        if: github.repository == 'kyngs/LibreLogin' && github.ref == 'refs/heads/dev'
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_DEV_WEBHOOK_URL }}
         run: ./gradlew :Plugin:release -PbuildTarget=dev
