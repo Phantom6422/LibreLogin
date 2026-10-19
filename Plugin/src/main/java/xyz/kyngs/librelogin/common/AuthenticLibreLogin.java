@@ -13,6 +13,7 @@ import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.kyori.adventure.audience.Audience;
 import org.bstats.charts.CustomChart;
 import org.jetbrains.annotations.Nullable;
@@ -621,40 +622,72 @@ public abstract class AuthenticLibreLogin<P, S> implements LibreLoginPlugin<P, S
             var connection = URI.create("https://api.github.com/repos/Phantom6422/LibreLogin/releases").toURL().openConnection();
 
             connection.setRequestProperty("User-Agent", "LibreLogin");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
 
-            var in = connection.getInputStream();
+            JsonArray root;
 
-            var root = GSON.fromJson(new InputStreamReader(in), JsonArray.class);
+            try (var in = new InputStreamReader(connection.getInputStream())) {
+                root = GSON.fromJson(in, JsonArray.class);
+            }
 
-            in.close(); //Not the safest way, but a slight leak isn't a big deal
+            if (root == null) {
+                logger.warn("Failed to check for updates: GitHub returned an empty response");
+                return;
+            }
 
             List<Release> behind = new ArrayList<>();
             SemanticVersion latest = null;
 
             for (JsonElement raw : root) {
+                if (!raw.isJsonObject()) {
+                    continue;
+                }
+
                 var release = raw.getAsJsonObject();
 
-                var version = SemanticVersion.parse(release.get("tag_name").getAsString());
-
-                if (latest == null) latest = version;
-
-                var shouldBreak = switch (this.version.compare(version)) {
-                    case 0, 1 -> true;
-                    default -> {
-                        behind.add(new Release(version, release.get("name").getAsString()));
-                        yield false;
-                    }
-                };
-
-                if (shouldBreak) {
-                    break;
+                if (isTrue(release, "draft") || isTrue(release, "prerelease")) {
+                    continue;
                 }
+
+                var tag = release.get("tag_name");
+
+                if (tag == null || tag.isJsonNull()) {
+                    continue;
+                }
+
+                var tagName = tag.getAsString();
+                SemanticVersion version;
+
+                try {
+                    version = SemanticVersion.parse(tagName);
+                } catch (RuntimeException e) {
+                    logger.warn("Failed to parse version tag '%s', skipping it".formatted(tagName));
+                    continue;
+                }
+
+                if (latest == null || version.compare(latest) > 0) {
+                    latest = version;
+                }
+
+                if (this.version.compare(version) >= 0) {
+                    continue;
+                }
+
+                var name = release.get("name");
+
+                behind.add(new Release(version, name == null || name.isJsonNull() ? tagName : name.getAsString()));
+            }
+
+            if (latest == null) {
+                logger.warn("Failed to check for updates: no valid releases found");
+                return;
             }
 
             if (behind.isEmpty()) {
                 logger.info("You are running the latest version of LibreLogin");
             } else {
-                Collections.reverse(behind);
+                behind.sort(Comparator.comparing(Release::version));
                 logger.warn("!! YOU ARE RUNNING AN OUTDATED VERSION OF LIBRELOGIN !!");
                 logger.info("You are running version %s, the latest version is %s. You are running %s versions behind. Newer versions:".formatted(getVersion(), latest, behind.size()));
                 for (Release release : behind) {
@@ -665,6 +698,12 @@ public abstract class AuthenticLibreLogin<P, S> implements LibreLoginPlugin<P, S
         } catch (Exception e) {
             logger.warn("Failed to check for updates", e);
         }
+    }
+
+    private static boolean isTrue(JsonObject object, String member) {
+        var element = object.get(member);
+
+        return element != null && !element.isJsonNull() && element.getAsBoolean();
     }
 
     public UUID generateNewUUID(String name, @Nullable UUID premiumID) {
