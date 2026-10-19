@@ -6,7 +6,6 @@
 
 package xyz.kyngs.librelogin.velocity;
 
-import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
@@ -78,7 +77,7 @@ public class VelocityListeners extends AuthenticListeners<VelocityLibreLogin, Pl
         super(plugin);
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(priority = -32767)
     public void onPostLogin(PostLoginEvent event) {
         onPostLogin(event.getPlayer(), null);
     }
@@ -88,20 +87,22 @@ public class VelocityListeners extends AuthenticListeners<VelocityLibreLogin, Pl
         onPlayerDisconnect(event.getPlayer());
     }
 
-    @Subscribe(order = PostOrder.NORMAL)
+    @Subscribe
     public void onProfileRequest(GameProfileRequestEvent event) {
         var existing = event.getGameProfile();
 
         if (existing != null && plugin.fromFloodgate(existing.getId())) return;
 
         var profile = plugin.getDatabaseProvider().getByName(event.getUsername());
+        if (profile == null || profile.getUuid() == null) return;
 
         var gProfile = event.getOriginalProfile();
+        if (gProfile == null) return;
 
         event.setGameProfile(new GameProfile(profile.getUuid(), gProfile.getName(), gProfile.getProperties()));
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(priority = -32767)
     public void onPreLogin(PreLoginEvent event) {
 
         if (!event.getResult().isAllowed())
@@ -109,22 +110,23 @@ public class VelocityListeners extends AuthenticListeners<VelocityLibreLogin, Pl
 
         // If floodgate is present, attempt to extract the floodgate player from the connection channel.
         if (plugin.floodgateEnabled()) {
-            Channel channel;
             InboundConnection connection = event.getConnection();
             try {
-                if (INITIAL_CONNECTION_DELEGATE != null) {
+                if (INITIAL_CONNECTION_DELEGATE != null && INITIAL_CONNECTION_DELEGATE.getDeclaringClass().isInstance(connection)) {
                     connection = (InboundConnection) INITIAL_CONNECTION_DELEGATE.get(connection);
                 }
 
-                Object mcConnection = INITIAL_MINECRAFT_CONNECTION.get(connection);
-                channel = (Channel) CHANNEL.get(mcConnection);
-
-                if (channel.attr(FLOODGATE_ATTR).get() != null) {
-                    return; // Player is coming from Floodgate
+                if (INITIAL_MINECRAFT_CONNECTION != null && INITIAL_MINECRAFT_CONNECTION.getDeclaringClass().isInstance(connection)) {
+                    Object mcConnection = INITIAL_MINECRAFT_CONNECTION.get(connection);
+                    if (mcConnection != null && CHANNEL != null) {
+                        Channel channel = (Channel) CHANNEL.get(mcConnection);
+                        if (channel != null && channel.attr(FLOODGATE_ATTR).get() != null) {
+                            return; // Player is coming from Floodgate
+                        }
+                    }
                 }
             } catch (Exception e) {
-                plugin.getLogger().warn("Failed to check if player is coming from Floodgate.");
-                e.printStackTrace();
+                plugin.getLogger().warn("Failed to check if player is coming from Floodgate.", e);
                 event.setResult(PreLoginEvent.PreLoginComponentResult.denied(Component.text("Internal LibreLogin error")));
                 return;
             }
@@ -145,7 +147,7 @@ public class VelocityListeners extends AuthenticListeners<VelocityLibreLogin, Pl
 
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(priority = -32767)
     public void chooseServer(PlayerChooseInitialServerEvent event) {
         var server = chooseServer(event.getPlayer(), null, null);
 
@@ -158,7 +160,7 @@ public class VelocityListeners extends AuthenticListeners<VelocityLibreLogin, Pl
 
     }
 
-    @Subscribe(order = PostOrder.EARLY)
+    @Subscribe(priority = 16383)
     public void onKick(KickedFromServerEvent event) {
         var reason = event.getServerKickReason().orElse(Component.text("null"));
         var message = plugin.getMessages().getMessage("info-kick").replaceText(builder -> builder.matchLiteral("%reason%").replacement(reason));

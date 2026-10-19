@@ -36,7 +36,7 @@ alt="Contributors listed"></img>
 
 ## Platforms
 
-- [x] Velocity (3.x & 4.x, including 4.2.1-SNAPSHOT)
+- [x] Velocity (3.x & 4.x, including 4.3.0)
 - [ ] Paper *(Dropped in 0.25+ - Velocity only)*
 - [ ] BungeeCord *(Dropped in 0.25+ due to Adventure 5 migration)*
 

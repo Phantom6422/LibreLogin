@@ -79,6 +79,10 @@ public class AuthenticListeners<Plugin extends AuthenticLibreLogin<P, S>, P, S> 
         } catch (PremiumException e) {
             var message = switch (e.getIssue()) {
                 case THROTTLED -> plugin.getMessages().getMessage("kick-premium-error-throttled");
+                case TIMED_OUT -> {
+                    plugin.getLogger().warn("Failed to reach authentication APIs within timeout while validating " + username);
+                    yield plugin.getMessages().getMessage("kick-premium-error-undefined");
+                }
                 default -> {
                     plugin.getLogger().error("Encountered an exception while communicating with the Mojang API!");
                     e.printStackTrace();

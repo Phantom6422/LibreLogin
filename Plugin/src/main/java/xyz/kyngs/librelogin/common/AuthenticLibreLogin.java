@@ -69,7 +69,7 @@ import xyz.kyngs.librelogin.common.util.CancellableTask;
 import xyz.kyngs.librelogin.common.util.GeneralUtil;
 
 import java.io.*;
-import java.net.URL;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
@@ -584,7 +584,7 @@ public abstract class AuthenticLibreLogin<P, S> implements LibreLoginPlugin<P, S
 
         if (!file.exists()) {
             logger.info("Forbidden passwords list doesn't exist, downloading...");
-            try (BufferedInputStream in = new BufferedInputStream(new URL("https://raw.githubusercontent.com/kyngs/LibreLogin/dev/forbidden-passwords.txt").openStream())) {
+            try (BufferedInputStream in = new BufferedInputStream(URI.create("https://raw.githubusercontent.com/Phantom6422/LibreLogin/dev/forbidden-passwords.txt").toURL().openStream())) {
                 if (!file.createNewFile()) {
                     throw new IOException("Failed to create file");
                 }
@@ -618,7 +618,7 @@ public abstract class AuthenticLibreLogin<P, S> implements LibreLoginPlugin<P, S
         logger.info("Checking for updates...");
 
         try {
-            var connection = new URL("https://api.github.com/repos/kyngs/LibreLogin/releases").openConnection();
+            var connection = URI.create("https://api.github.com/repos/Phantom6422/LibreLogin/releases").toURL().openConnection();
 
             connection.setRequestProperty("User-Agent", "LibreLogin");
 

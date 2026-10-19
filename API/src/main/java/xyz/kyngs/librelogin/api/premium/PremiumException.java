@@ -58,6 +58,10 @@ public class PremiumException extends Exception {
          */
         THROTTLED,
         /**
+         * The API request timed out.
+         */
+        TIMED_OUT,
+        /**
          * The API returned an invalid response.
          */
         SERVER_EXCEPTION,
