@@ -2,6 +2,8 @@
 
 (formerly LibrePremium) is an open-source, Velocity-focused, and highly customizable authentication plugin with outstanding features and API.
 
+> **Note:** This plugin is originally forked from [kyngs/LibreLogin](https://github.com/kyngs/LibreLogin) by [kyngs](https://github.com/kyngs). This fork is maintained for private use only, and we do not provide support for public use.
+
 # Quick information
 
 <img src="https://img.shields.io/badge/Java%20version-%2021+-blue?style=for-the-badge&logo=java&logoColor=white"
