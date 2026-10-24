@@ -44,6 +44,7 @@ dependencies {
 
     // ACF
     librarian(libs.acf.velocity)
+    librarian(libs.acf.paper)
 
     // Utils
     librarian(libs.caffeine)
@@ -54,6 +55,7 @@ dependencies {
     librarian(libs.bouncycastle)
     librarian(libs.commons.email)
     librarian(libs.adventure.minimessage)
+    librarian(libs.adventure.serializer.legacy)
     librarian(libs.legacymessage)
 
     // Geyser
@@ -66,16 +68,29 @@ dependencies {
 
     // bStats
     librarian(libs.bstats.velocity)
+    librarian(libs.bstats.bukkit)
 
+    // Paper / Bukkit / Spigot
+    compileOnly(libs.paper.api)
     compileOnly(libs.adventure.api)
+    compileOnly(libs.packetevents.spigot)
     compileOnly(libs.netty.transport)
+    compileOnly(libs.datafixerupper)
     compileOnly(libs.log4j.core)
 
     // Librarian
     implementation(libs.librarian.velocity)
+    implementation(libs.librarian.paper)
 
     // NanoLimboPlugin
     compileOnly(libs.nanolimbo.api)
+}
+
+tasks.withType<ProcessResources> {
+    outputs.upToDateWhen { false }
+    filesMatching(listOf("plugin.yml", "paper-plugin.yml")) {
+        expand(mapOf("version" to version))
+    }
 }
 
 sourceSets {
@@ -139,13 +154,20 @@ mcupload {
             }
         } else if (System.getProperty("buildTarget") == "release") {
             modrinth {
-                loaders = listOf("velocity")
+                loaders = listOf("paper", "purpur", "spigot", "bukkit", "velocity")
                 projectId = "tL0SCXYq"
+                gameVersions = listOf(
+                    "26.3", "26.2", "26.1.2", "26.1.1", "26.1",
+                    "1.21.11", "1.21.10", "1.21.9", "1.21.8", "1.21.7", "1.21.6", "1.21.5",
+                    "1.21.4", "1.21.3", "1.21.2", "1.21.1", "1.21",
+                    "1.20.6", "1.20.5", "1.20.4", "1.20.3", "1.20.2", "1.20.1", "1.20",
+                    "1.19.4", "1.19.3", "1.19.2", "1.19.1", "1.19",
+                )
                 token = System.getenv("MODRINTH_TOKEN")
             }
             github {
                 token = System.getenv("GITHUB_TOKEN")
-                repository = "kyngs/LibreLogin"
+                repository = "Phantom6422/LibreLogin"
             }
             discord {
                 webhookUrl = System.getenv("DISCORD_WEBHOOK_URL")

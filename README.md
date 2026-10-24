@@ -1,6 +1,6 @@
 # LibreLogin
 
-(formerly LibrePremium) is an open-source, Velocity-focused, and highly customizable authentication plugin with outstanding features and API.
+(formerly LibrePremium) is an open-source, multiplatform, and highly customizable authentication plugin with outstanding features and API.
 
 # Quick information
 
@@ -37,15 +37,18 @@ alt="Contributors listed"></img>
 ## Platforms
 
 - [x] Velocity (3.x & 4.x, including 4.3.0)
-- [ ] Paper *(Dropped in 0.25+ - Velocity only)*
+- [x] Paper (1.20.5+ / 26.x, tested up to 26.3)
+- [x] Spigot / Bukkit (1.20.5+ / 26.x, tested up to 26.3)
 - [ ] BungeeCord *(Dropped in 0.25+ due to Adventure 5 migration)*
+
+> Bukkit, Spigot and Paper servers require [PacketEvents](https://modrinth.com/plugin/packetevents) 2.14.0 or newer.
 
 ## Building from Source
 
 To build the plugin jar:
 
 ```bash
-# Requires Java 21 or newer
+# Requires Java 25 or newer
 ./gradlew shadowJar
 ```
 

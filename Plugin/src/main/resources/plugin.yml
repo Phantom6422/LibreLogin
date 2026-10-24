@@ -1,0 +1,13 @@
+name: "LibreLogin"
+version: '${version}'
+main: "xyz.kyngs.librelogin.paper.PaperBootstrap"
+api-version: "1.19"
+author: "kyngs"
+description: "Authentication plugin for cracked and premium Minecraft servers"
+depend:
+  - packetevents
+softdepend:
+  - ViaVersion
+  - Geyser-Spigot
+  - floodgate
+  - LuckPerms
