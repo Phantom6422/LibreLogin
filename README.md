@@ -2,7 +2,7 @@
 
 (formerly LibrePremium) is an open-source, Velocity-focused, and highly customizable authentication plugin with outstanding features and API.
 
-> **Note:** This plugin is originally forked from [kyngs/LibreLogin](https://github.com/kyngs/LibreLogin) by [kyngs](https://github.com/kyngs). This fork is only for [PhantomsNetwork](https://phantomsnetwork.org) internal use, so we do not provide support for others.
+> **Note:** This plugin is originally forked from [kyngs/LibreLogin](https://github.com/kyngs/LibreLogin) by [kyngs](https://github.com/kyngs). This fork is only for [PhantomsNetwork](https://phantomsnetwork.org) internal use, so we do not provide support for others. New versions can be found at [Phantom6422/TemsLogin](https://github.com/Phantom6422/TemsLogin)
 
 # Quick information
 
